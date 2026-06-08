@@ -1,0 +1,29 @@
+{
+  "id": "caso_03",
+  "name": "A Fraude Corporal S/A",
+  "code": "CSI-2026-03",
+  "description": "Um desvio de 12 milhões de reais foi descoberto após a falsificação de um contrato particular de responsabilidade limitada. O autor tentou apagar seus rastros, mas marcas palmares parciais foram reveladas por radiação térmica e luz fluorescente. Uma placa veicular em fuga de trânsito também foi recuperada.",
+  "difficulty": "Difícil",
+  "date": "08/06/2026",
+  "suspects": [
+    {
+      "name": "Carlos Marcondes",
+      "role": "Sócio Majoritário",
+      "avatar": "👨‍💼",
+      "details": "Assinatura grafoscópica sob forte pressão física anormal e formulação de tinta adulterada com o valor original."
+    },
+    {
+      "name": "Ana Morais",
+      "role": "Diretora de Operações",
+      "avatar": "👩‍💼",
+      "details": "Dona de um Renault Sandero Prata registrado em seu nome. Quiroscopia palmar compatível."
+    },
+    {
+      "name": "Felipe Santos",
+      "role": "Gerente de TI",
+      "avatar": "👨‍💻",
+      "details": "Responsável técnico pela rede local. Apresentou comportamento suspeito de esvaziamento de dados."
+    }
+  ],
+  "evidenceIds": ["DOC-2023-11-05", "DP-2023-11-15", "VID-2023-11-21"]
+}

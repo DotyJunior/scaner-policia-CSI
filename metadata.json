@@ -1,0 +1,6 @@
+{
+  "name": "Forensic Scanner",
+  "description": "An isolated test project to validate, debug, and run the Forensic Footprint Scanner component.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

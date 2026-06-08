@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helper Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Helper validating the structure of an Evidence Card
+    function isValidEvidenceCard(data) {
+      return data.keys().hasAll(['id', 'label', 'scannerMode']) &&
+             data.id is string && data.id.size() <= 128 &&
+             data.label is string && data.label.size() <= 200 &&
+             (!data.keys().hasAny(['userId']) || data.userId is string) &&
+             (data.scannerMode == 'FOOTPRINT' || 
+              data.scannerMode == 'DNA' || 
+              data.scannerMode == 'DOCUMENT' || 
+              data.scannerMode == 'DIGITAL' || 
+              data.scannerMode == 'VIDEO');
+    }
+
+    // Match rules for the evidences collection
+    match /evidences/{evidenceId} {
+      allow read: if isSignedIn();
+      
+      allow create: if isSignedIn() && 
+                       isValidId(evidenceId) && 
+                       isValidEvidenceCard(incoming()) &&
+                       (incoming().userId == request.auth.uid || !incoming().keys().hasAny(['userId']));
+                       
+      allow update: if isSignedIn() && 
+                       isValidId(evidenceId) && 
+                       isValidEvidenceCard(incoming()) &&
+                       (incoming().userId == request.auth.uid || !incoming().keys().hasAny(['userId'])) &&
+                       (!existing().keys().hasAny(['userId']) || incoming().userId == existing().userId);
+                       
+      allow delete: if isSignedIn() && 
+                       (!existing().keys().hasAny(['userId']) || existing().userId == request.auth.uid);
+    }
+  }
+}

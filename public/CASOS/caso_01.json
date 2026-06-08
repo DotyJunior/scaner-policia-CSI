@@ -1,0 +1,29 @@
+{
+  "id": "caso_01",
+  "name": "Assalto à Joalheria Diamante",
+  "code": "CSI-2026-01",
+  "description": "Um colar de diamante de valor inestimável foi subtraído da vitrine principal. Três itens suspeitos foram coletados no local: uma pegada na argila externa, um bulbo capilar nas grades de segurança e uma marca digital latente no vidro. Descubra quem é o verdadeiro ladrão.",
+  "difficulty": "Fácil",
+  "date": "08/06/2026",
+  "suspects": [
+    {
+      "name": "Marcos Silva",
+      "role": "Contador (Suspeito A)",
+      "avatar": "👨‍💼",
+      "details": "Apresenta dívidas acumuladas. Ausentou-se do escritório durante a hora estimada da quebra comercial."
+    },
+    {
+      "name": "Luca Oliveira",
+      "role": "Zelador Noturno (Suspeito B)",
+      "avatar": "👨‍🔧",
+      "details": "Estava encarregado da chave reserva de acesso, alegando tê-la deixado na gaveta central."
+    },
+    {
+      "name": "Carla Souza",
+      "role": "Ex-Segurança (Suspeito C)",
+      "avatar": "👩‍💼",
+      "details": "Dispensada recentemente por conduta duvidosa. Conhece perfeitamente os pontos cegos das câmeras."
+    }
+  ],
+  "evidenceIds": ["FP-2023-10-25", "DNA-2023-10-26", "DP-2023-11-01"]
+}

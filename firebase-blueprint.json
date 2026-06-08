@@ -1,0 +1,96 @@
+{
+  "entities": {
+    "EvidenceResultCustom": {
+      "title": "EvidenceResultCustom",
+      "description": "Granular forensic analysis details and matched results",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique record identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Large display header of analysis"
+        },
+        "typeName": {
+          "type": "string",
+          "description": "Classification name"
+        },
+        "labTech": {
+          "type": "string",
+          "description": "Assigned laboratory technician"
+        },
+        "equipment": {
+          "type": "string",
+          "description": "Scanning device used"
+        },
+        "defaultConfidence": {
+          "type": "number",
+          "description": "Base confidence rate"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "typeName"
+      ]
+    },
+    "EvidenceCard": {
+      "title": "EvidenceCard",
+      "description": "Forensic evidence card with image binary reference and scanning parameters",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Document ID"
+        },
+        "label": {
+          "type": "string",
+          "description": "Card category label"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Graphic representative emoji"
+        },
+        "image": {
+          "type": "string",
+          "description": "Base64 string, SVG, or Firebase Storage URL"
+        },
+        "scannerMode": {
+          "type": "string",
+          "enum": [
+            "FOOTPRINT",
+            "DNA",
+            "DOCUMENT",
+            "DIGITAL",
+            "VIDEO"
+          ]
+        },
+        "userId": {
+          "type": "string",
+          "description": "Creator user ID for scoped queries"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "scannerMode"
+      ]
+    }
+  },
+  "firestore": {
+    "/evidences/{evidenceId}": {
+      "schema": "EvidenceCard",
+      "description": "Primary repository of forensic scanning evidences"
+    }
+  }
+}

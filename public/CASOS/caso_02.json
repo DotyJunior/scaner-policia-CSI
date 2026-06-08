@@ -1,0 +1,29 @@
+{
+  "id": "caso_02",
+  "name": "Intriga no Consulado Diplomático",
+  "code": "CSI-2026-02",
+  "description": "Um escândalo político estourou no consulado com o vazamento de laudos de imigração adulterados. Uma sapatilha de jogging esportiva deixou pegadas no carpete químico. Um passaporte consular falsificado foi interceptado, além de uma fita de CFTV em ângulo de baixa luz e análises de secreção biológica.",
+  "difficulty": "Médio",
+  "date": "08/06/2026",
+  "suspects": [
+    {
+      "name": "Lucia Campos",
+      "role": "Vice-Consulesa",
+      "avatar": "👩‍💼",
+      "details": "A assinatura dela aparece em documentos re-pregados quimicamente sob luz ultravioleta profunda."
+    },
+    {
+      "name": "Rogério Dias",
+      "role": "Adido Comercial",
+      "avatar": "👨‍💼",
+      "details": "Frequência de alelos compatível com as secreções biológicas residuais descobertas na área de arquivos."
+    },
+    {
+      "name": "Carlos Augusto",
+      "role": "Segurança Particular",
+      "avatar": "👮",
+      "details": "Ficha criminal histórica encontrada no AFIS/Mugshot corporativo. Flagrado no CFTV do corredor escuro."
+    }
+  ],
+  "evidenceIds": ["FP-2023-11-12", "DNA-2023-10-27", "DOC-2023-11-06", "VID-2023-11-20"]
+}
