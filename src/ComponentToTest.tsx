@@ -445,6 +445,15 @@ export default function ForensicScanner({
   const [showCasesDropdown, setShowCasesDropdown] = useState(false);
   const [activeTab, setActiveTab] = useState<"DOSSIER" | "SCANNER">("DOSSIER");
   const [showBriefingPanel, setShowBriefingPanel] = useState(true);
+  const [mobileSidebarExpanded, setMobileSidebarExpanded] = useState(false);
+
+  // Hover states for mobile menus/containers
+  const [isMainContainerHovered, setIsMainContainerHovered] = useState(false);
+  const [isCenterAnalysisHovered, setIsCenterAnalysisHovered] = useState(false);
+  const [isToolsDropdownHovered, setIsToolsDropdownHovered] = useState(false);
+  const [isActiveCaseHovered, setIsActiveCaseHovered] = useState(false);
+  const [isCasesDropdownHovered, setIsCasesDropdownHovered] = useState(false);
+  const [isDossierButtonHovered, setIsDossierButtonHovered] = useState(false);
 
   // Filter evidence by active case list
   const filteredLocalEvidence = EVIDENCE_CARDS.filter(
@@ -618,23 +627,23 @@ export default function ForensicScanner({
     }}>
 
       {/* Top Header Bar */}
-      <div style={{
+      <div className="scientific-header desktop-only-header" style={{
         display: "flex", alignItems: "center",
         borderBottom: "1px solid #1e293b",
         padding: "10px 20px", height: 45,
         background: "#0f172a", boxSizing: "border-box"
       }}>
-        <div style={{ display: "flex", gap: 6, marginRight: 16 }}>
+        <div className="decoration-dots" style={{ display: "flex", gap: 6, marginRight: 16 }}>
           {["#38bdf8", "#64748b", "#94a3b8"].map((c) => (
             <div key={c} style={{ width: 8, height: 8, borderRadius: "50%", background: c }} />
           ))}
         </div>
-        <span style={{ fontSize: 10, fontWeight: "bold", letterSpacing: 2.5, color: "#38bdf8", marginRight: 16, fontFamily: '"JetBrains Mono", monospace' }}>
+        <span className="scientific-header-title" style={{ fontSize: 10, fontWeight: "bold", letterSpacing: 2.5, color: "#38bdf8", marginRight: 16, fontFamily: '"JetBrains Mono", monospace' }}>
           POLÍCIA CIENTÍFICA — ANÁLISE DE VESTÍGIOS
         </span>
 
         {/* [TOOLS] drop-down button selector */}
-        <div style={{ position: "relative" }}>
+        <div className="tools-wrapper" style={{ position: "relative" }}>
           <button 
             id="tools-menu-btn"
             onClick={() => {
@@ -657,7 +666,7 @@ export default function ForensicScanner({
             }}
             className="hover:bg-slate-800 hover:border-sky-400 transition-colors"
           >
-            <span>[ FERRAMENTAS RESTRITAS ]</span>
+            <span>[ 🔬 CENTRO DE ANÁLISE ]</span>
             <span style={{ fontSize: 9 }}>
               {activeScannerMode === "FOOTPRINT" ? "🥾" :
                activeScannerMode === "DNA" ? "🧬" :
@@ -686,7 +695,7 @@ export default function ForensicScanner({
                 { key: "FOOTPRINT", name: "Análise de Pegadas", icon: "🥾" },
                 { key: "DNA", name: "Análise de Amostras DNA", icon: "🧬" },
                 { key: "DOCUMENT", name: "Análise de Documentos", icon: "📄" },
-                { key: "DIGITAL", name: "Análise de Impressões Digitais", icon: "🫵" },
+                { key: "DIGITAL", name: "Análise de Impressões Digitais", icon: "𫖉" },
                 { key: "VIDEO", name: "Análise Forense de Vídeo", icon: "📹" },
               ].map((item) => {
                 const isSelected = activeScannerMode === item.key;
@@ -724,7 +733,7 @@ export default function ForensicScanner({
         </div>
 
         {/* [CASOS] drop-down button selector */}
-        <div style={{ position: "relative", marginLeft: 10 }}>
+        <div className="cases-wrapper" style={{ position: "relative", marginLeft: 10 }}>
           <button 
             id="cases-menu-btn"
             onClick={() => {
@@ -815,7 +824,7 @@ export default function ForensicScanner({
           )}
         </div>
 
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 18, fontSize: 10, fontFamily: '"JetBrains Mono", monospace' }}>
+        <div className="header-status-wrapper" style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 18, fontSize: 10, fontFamily: '"JetBrains Mono", monospace' }}>
           {/* Scientific Police real-time indicators */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 4 }}>
             <span style={{ fontSize: 9, color: "#94a3b8", letterSpacing: 0.5, display: "flex", alignItems: "center", gap: 6 }}>
@@ -826,101 +835,633 @@ export default function ForensicScanner({
         </div>
       </div>
 
-      <div style={{ display: "flex", height: "calc(100vh - 45px)" }}>
+      {/* Mobile-Only Header aligned with reference mockup */}
+      <div className="mobile-only-header" style={{
+        padding: "12px 14px 16px 14px",
+        background: "#090d16",
+        borderBottom: "1px solid #1e293b",
+        display: "flex",
+        flexDirection: "column",
+        gap: "14px",
+        boxSizing: "border-box",
+        width: "100%",
+        position: "relative"
+      }}>
+        {/* Backdrop for click outside to close the mobile dropdowns */}
+        {(showToolsDropdown || showCasesDropdown) && (
+          <div 
+            onClick={() => {
+              setShowToolsDropdown(false);
+              setShowCasesDropdown(false);
+            }}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.45)",
+              zIndex: 240,
+              cursor: "pointer"
+            }}
+          />
+        )}
+
+        {/* Top header tabs info */}
+        <div style={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          width: "100%",
+          boxSizing: "border-box",
+          borderBottom: "1px solid #5368a8",
+          paddingBottom: "0px",
+          marginBottom: "2px"
+        }}>
+          {/* Active styling tab */}
+          <div style={{
+            position: "relative",
+            background: "#5368a8",
+            padding: "1px 1px 0 1px",
+            clipPath: "polygon(0 0, 88% 0, 100% 100%, 0 100%)",
+            boxSizing: "border-box"
+          }}>
+            <div style={{
+              background: "#1b2e47",
+              color: "#25b9b7",
+              fontWeight: "900",
+              fontStyle: "italic",
+              fontSize: "7.5px",
+              fontFamily: '"Space Grotesk", "JetBrains Mono", "Inter", sans-serif',
+              letterSpacing: "0.2px",
+              padding: "4px 14px 4px 8px",
+              clipPath: "polygon(0 0, 88% 0, 100% 100%, 0 100%)",
+              textTransform: "uppercase",
+              boxSizing: "border-box",
+              whiteSpace: "nowrap"
+            }}>
+              POLICE LABORATORY - HUB
+            </div>
+          </div>
+          {/* Static/Status right text info */}
+          <div style={{
+            background: "#1b2e47",
+            padding: "4px 6px 3px 6px",
+            color: "#758cd5",
+            fontSize: "6.5px",
+            fontFamily: '"JetBrains Mono", monospace',
+            fontWeight: "bold",
+            letterSpacing: "0.2px",
+            textAlign: "right",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+            boxSizing: "border-box",
+            display: "flex",
+            alignItems: "center"
+          }}>
+            POLÍCIA CIENTÍFICA — PERÍCIA CRIMINAL
+          </div>
+        </div>
+
+        {/* Central visual outline layout wrapping the main menu items */}
+        <div 
+          onMouseEnter={() => setIsMainContainerHovered(true)}
+          onMouseLeave={() => setIsMainContainerHovered(false)}
+          onTouchStart={() => setIsMainContainerHovered(true)}
+          onTouchEnd={() => setIsMainContainerHovered(false)}
+          style={{
+            border: isMainContainerHovered ? "1px solid #00daff" : "1px solid #5173d9",
+            borderRadius: "0 0 6px 6px",
+            marginTop: "-1px",
+            padding: "16px 12px 14px 12px",
+            background: "rgba(11, 19, 41, 0.5)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "18px",
+            boxSizing: "border-box",
+            boxShadow: isMainContainerHovered ? "0 0 8px rgba(0, 218, 255, 0.2)" : "none",
+            transition: "all 0.2s"
+          }}
+        >
+          {/* Main Title Banner "PERITO EM CAMPO" */}
+          <div style={{
+            fontFamily: '"JetBrains Mono", monospace',
+            fontSize: "24px",
+            fontWeight: 800,
+            letterSpacing: "3px",
+            color: "#e2e8f0",
+            textAlign: "center",
+            textShadow: "0 0 8px rgba(241, 245, 249, 0.15)",
+            margin: "4px 0"
+          }}>
+            PERITO EM CAMPO
+          </div>
+
+          {/* Grid for Centro de Análise and Caso Ativo */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "12px",
+            width: "100%",
+            boxSizing: "border-box"
+          }}>
+            {/* Left: Component selector Center of Analysis (opens SCANNER) */}
+            <div style={{ position: "relative", width: "100%" }}>
+              <button 
+                onClick={() => {
+                  try {
+                    audioController.playTone(523.25, 0.1, 0.15);
+                  } catch (e) {}
+                  setActiveTab("SCANNER");
+                  // Toggle tool dropdown as well so they can optionally change mode
+                  setShowToolsDropdown(!showToolsDropdown);
+                  setShowCasesDropdown(false);
+                }}
+                onMouseEnter={() => setIsCenterAnalysisHovered(true)}
+                onMouseLeave={() => setIsCenterAnalysisHovered(false)}
+                onTouchStart={() => setIsCenterAnalysisHovered(true)}
+                onTouchEnd={() => setIsCenterAnalysisHovered(false)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  background: "rgba(13, 21, 39, 0.8)",
+                  border: isCenterAnalysisHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                  borderRadius: "5px",
+                  padding: "10px 8px",
+                  color: "#ffffff",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  fontWeight: "bold",
+                  fontSize: "11px",
+                  width: "100%",
+                  cursor: "pointer",
+                  textTransform: "uppercase",
+                  boxSizing: "border-box",
+                  height: "56px",
+                  boxShadow: isCenterAnalysisHovered ? "0px 0px 10px rgba(0, 218, 255, 0.3)" : "none",
+                  outline: "none",
+                  transition: "all 0.2s"
+                }}
+              >
+                <span style={{ fontSize: "16px", color: "#38bdf8" }}>🔎</span>
+                <span style={{ letterSpacing: "0.2px" }}>CENTRO DE ANALISE</span>
+              </button>
+
+              {/* Tools list dropdown specifically styled for mobile column */}
+              {showToolsDropdown && (
+                <div 
+                  onMouseEnter={() => setIsToolsDropdownHovered(true)}
+                  onMouseLeave={() => setIsToolsDropdownHovered(false)}
+                  onTouchStart={() => setIsToolsDropdownHovered(true)}
+                  onTouchEnd={() => setIsToolsDropdownHovered(false)}
+                  style={{
+                    position: "absolute",
+                    top: "60px",
+                    left: 0,
+                    width: "200%",
+                    maxWidth: "calc(100vw - 44px)",
+                    background: "#090d16",
+                    border: isToolsDropdownHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                    borderRadius: "6px",
+                    boxShadow: isToolsDropdownHovered ? "0 0 15px rgba(0, 218, 255, 0.3)" : "0 10px 30px rgba(0,0,0,0.85)",
+                    zIndex: 250,
+                    padding: "6px 0",
+                    boxSizing: "border-box",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  <div style={{ 
+                    padding: "6px 12px", 
+                    fontSize: 8, 
+                    color: "#64748b", 
+                    letterSpacing: 1, 
+                    borderBottom: "1px solid #1e293b", 
+                    marginBottom: 4, 
+                    fontFamily: '"JetBrains Mono", monospace',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}>
+                    <span>SELECIONE O TIPO VESTÍGIO</span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowToolsDropdown(false);
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#ef4444",
+                        fontSize: "11px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        padding: "0 4px",
+                        display: "flex",
+                        alignItems: "center",
+                        minHeight: "auto",
+                        lineHeight: 1
+                      }}
+                      title="Fechar"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  {[
+                    { key: "FOOTPRINT", name: "Análise de Pegadas", icon: "🥾" },
+                    { key: "DNA", name: "Análise de Amostras DNA", icon: "🧬" },
+                    { key: "DOCUMENT", name: "Análise de Documentos", icon: "📄" },
+                    { key: "DIGITAL", name: "Análise de Impressões Digitais", icon: "𫖉" },
+                    { key: "VIDEO", name: "Análise Forense de Vídeo", icon: "📹" },
+                  ].map((item) => {
+                    const isSelected = activeScannerMode === item.key;
+                    return (
+                      <div
+                        key={item.key}
+                        onClick={() => {
+                          setActiveScannerMode(item.key as any);
+                          setShowToolsDropdown(false);
+                          setActiveTab("SCANNER");
+                        }}
+                        style={{
+                          padding: "11px 14px",
+                          fontSize: "10.5px",
+                          color: isSelected ? "#00daff" : "#94a3b8",
+                          background: isSelected ? "rgba(0, 218, 255, 0.08)" : "transparent",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                          transition: "all 0.15s ease",
+                        }}
+                        className="hover:bg-slate-800 hover:text-sky-300"
+                      >
+                        <span style={{ fontSize: 13 }}>{item.icon}</span>
+                        <span style={{ fontWeight: isSelected ? "bold" : "normal", letterSpacing: 0.5, fontFamily: '"JetBrains Mono", monospace' }}>
+                          {item.name}
+                        </span>
+                        {isSelected && <span style={{ marginLeft: "auto", fontSize: 8 }}>◀</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Right: Active criminal case card indicator */}
+            <div style={{ position: "relative", width: "100%" }}>
+              <div 
+                onClick={() => {
+                  setShowCasesDropdown(!showCasesDropdown);
+                  setShowToolsDropdown(false);
+                }}
+                onMouseEnter={() => setIsActiveCaseHovered(true)}
+                onMouseLeave={() => setIsActiveCaseHovered(false)}
+                onTouchStart={() => setIsActiveCaseHovered(true)}
+                onTouchEnd={() => setIsActiveCaseHovered(false)}
+                style={{
+                  position: "relative",
+                  background: "rgba(13, 21, 39, 0.8)",
+                  border: isActiveCaseHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                  borderRadius: "5px",
+                  padding: "16px 10px 6px 10px",
+                  color: "#ffffff",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  width: "100%",
+                  cursor: "pointer",
+                  boxSizing: "border-box",
+                  height: "56px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  boxShadow: isActiveCaseHovered ? "0px 0px 10px rgba(0, 218, 255, 0.15)" : "none",
+                  transition: "all 0.2s"
+                }}
+              >
+                {/* Blinking Orange/Red Dot on top tab */}
+                <div 
+                  className="pulsing-red-dot" 
+                  style={{
+                    position: "absolute",
+                    top: "-6px",
+                    left: "14px",
+                    width: "11px",
+                    height: "11px",
+                    borderRadius: "50%",
+                    border: "1.5px solid #090d16",
+                    zIndex: 20
+                  }} 
+                />
+
+                {/* Tab header label 'CASO ATIVO' */}
+                <div style={{
+                  position: "absolute",
+                  top: "-9px",
+                  left: "29px",
+                  background: "#090d16",
+                  border: isActiveCaseHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                  borderBottom: "none",
+                  borderRadius: "3px 3px 0 0",
+                  color: isActiveCaseHovered ? "#00daff" : "#758cd5",
+                  fontSize: "7.5px",
+                  fontWeight: "bold",
+                  padding: "1px 6px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  transition: "color 0.2s, border-color 0.2s"
+                }}>
+                  CASO ATIVO
+                </div>
+
+                {/* Small preview text of the crime case */}
+                <div style={{ 
+                  fontSize: "8.5px", 
+                  fontWeight: "bold", 
+                  color: "#f1f5f9", 
+                  lineHeight: 1.2,
+                  maxWidth: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  marginTop: "6px"
+                }}>
+                  {activeCase.name}
+                </div>
+                <div style={{ 
+                  fontSize: "7.5px", 
+                  color: "#a1a1aa", 
+                  fontFamily: '"JetBrains Mono", monospace',
+                  marginTop: "1px"
+                }}>
+                  {activeCase.code}
+                </div>
+              </div>
+
+              {/* Cases dropdown specifically styled for mobile column */}
+              {showCasesDropdown && (
+                <div 
+                  onMouseEnter={() => setIsCasesDropdownHovered(true)}
+                  onMouseLeave={() => setIsCasesDropdownHovered(false)}
+                  onTouchStart={() => setIsCasesDropdownHovered(true)}
+                  onTouchEnd={() => setIsCasesDropdownHovered(false)}
+                  style={{
+                    position: "absolute",
+                    top: "60px",
+                    right: 0,
+                    width: "200%",
+                    maxWidth: "calc(100vw - 44px)",
+                    background: "#090d16",
+                    border: isCasesDropdownHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                    borderRadius: "6px",
+                    boxShadow: isCasesDropdownHovered ? "0 0 15px rgba(0, 218, 255, 0.3)" : "0 10px 30px rgba(0,0,0,0.85)",
+                    zIndex: 250,
+                    padding: "6px 0",
+                    boxSizing: "border-box",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  <div style={{ 
+                    padding: "6px 12px", 
+                    fontSize: 8, 
+                    color: "#64748b", 
+                    letterSpacing: 1, 
+                    borderBottom: "1px solid #1e293b", 
+                    marginBottom: 4, 
+                    fontFamily: '"JetBrains Mono", monospace',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}>
+                    <span>INVESTIGAÇÕES INSTALADAS</span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCasesDropdown(false);
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#ef4444",
+                        fontSize: "11px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        padding: "0 4px",
+                        display: "flex",
+                        alignItems: "center",
+                        minHeight: "auto",
+                        lineHeight: 1
+                      }}
+                      title="Fechar"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  {PREBUILT_CASES.map((item) => {
+                    const isSelected = activeCase.id === item.id;
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => {
+                          setActiveCase(item);
+                          setShowCasesDropdown(false);
+                          setActiveTab("DOSSIER");
+                          try {
+                            audioController.playTone(523.25, 0.12, 0.25);
+                          } catch (err) {}
+                        }}
+                        style={{
+                          padding: "11px 14px",
+                          color: isSelected ? "#00daff" : "#94a3b8",
+                          background: isSelected ? "rgba(0, 218, 255, 0.08)" : "transparent",
+                          cursor: "pointer",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
+                          transition: "all 0.15s ease",
+                        }}
+                        className="hover:bg-slate-800 hover:text-sky-300"
+                      >
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <span style={{ fontSize: "10px", fontWeight: "bold", fontFamily: '"JetBrains Mono", monospace' }}>
+                            📁 {item.name}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: "8px", opacity: 0.6, fontFamily: '"JetBrains Mono", monospace', marginTop: "1px" }}>
+                          REG: {item.code}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Bottom active selector: DOCIÊ E VESTÍGIOS (opens DOSSIER) */}
+          <div style={{
+            position: "relative",
+            width: "100%",
+            boxSizing: "border-box"
+          }}>
+            <button
+              onClick={() => {
+                setActiveTab("DOSSIER");
+                try {
+                  audioController.playTone(440, 0.1, 0.15);
+                } catch (e) {}
+              }}
+              onMouseEnter={() => setIsDossierButtonHovered(true)}
+              onMouseLeave={() => setIsDossierButtonHovered(false)}
+              onTouchStart={() => setIsDossierButtonHovered(true)}
+              onTouchEnd={() => setIsDossierButtonHovered(false)}
+              style={{
+                width: "100%",
+                padding: "14px 10px",
+                background: activeTab === "DOSSIER" ? "rgba(81, 115, 217, 0.15)" : "rgba(13, 21, 39, 0.8)",
+                border: isDossierButtonHovered ? "1px solid #00daff" : "1px solid #5173d9",
+                borderRadius: "5px",
+                color: "#ffffff",
+                fontWeight: "bold",
+                fontSize: "14px",
+                cursor: "pointer",
+                letterSpacing: "2.5px",
+                textTransform: "uppercase",
+                fontFamily: '"JetBrains Mono", monospace',
+                boxShadow: isDossierButtonHovered ? "0px 0px 12px rgba(0, 218, 255, 0.3)" : "none",
+                transition: "all 0.2s ease"
+              }}
+            >
+              DOCIÊ E VESTÍGIOS
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="scientific-body" style={{ display: "flex", height: "calc(100vh - 45px)" }}>
 
         {/* Sidebar */}
-        <div style={{
+        <div className="scientific-sidebar" style={{
           width: 220, background: "#0b1329",
           borderRight: "1px solid #1e293b",
           padding: "16px 12px", flexShrink: 0,
           display: "flex", flexDirection: "column",
           justifyContent: "space-between", overflowY: "auto"
         }}>
-          <div>
-            <div style={{ fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
-              PROVAS E VESTÍGIOS
-            </div>
-            {evidenceListToUse.map((ev) => {
-              const isSelected = ev.id === activeEvidence.id;
-              return (
-                <div
-                  key={ev.id}
-                  onClick={() => handleSelectEvidence(ev)}
-                  style={{
-                    padding: "8px 10px", marginBottom: 6,
-                    background: isSelected ? "rgba(56, 189, 248, 0.12)" : "transparent",
-                    border: isSelected ? "1px solid #38bdf850" : "1px solid transparent",
-                    borderRadius: 3, fontSize: 9,
-                    color: isSelected ? "#38bdf8" : "#94a3b8",
-                    cursor: scanning ? "not-allowed" : "pointer",
-                    letterSpacing: 0.5,
-                    display: "flex", alignItems: "center", gap: 8,
-                    transition: "all 0.2s ease"
-                  }}
-                  className={scanning ? "" : "hover:bg-slate-800 hover:text-sky-300"}
-                >
-                  <span style={{ fontSize: 12 }}>{ev.icon}</span>
-                  <div style={{ flexGrow: 1 }}>
-                    <div style={{ fontWeight: "bold", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
-                      <span>{ev.id}</span>
-                    </div>
-                    <div style={{ fontSize: 8, opacity: 0.8 }}>{ev.label}</div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Toggle button for mobile */}
+          <button
+            onClick={() => setMobileSidebarExpanded(!mobileSidebarExpanded)}
+            style={{
+              display: "none",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              background: "rgba(56, 189, 248, 0.08)",
+              border: "1px solid #334155",
+              color: "#38bdf8",
+              padding: "10px 14px",
+              fontSize: "10px",
+              fontFamily: '"JetBrains Mono", monospace',
+              fontWeight: "bold",
+              borderRadius: 4,
+              cursor: "pointer",
+              letterSpacing: 1,
+              marginBottom: 12,
+              outline: "none"
+            }}
+            className="mobile-sidebar-toggle"
+          >
+            <span>{mobileSidebarExpanded ? "▲ OCULTAR PAINEL E VESTÍGIOS" : "▼ EXIBIR PAINEL DE CONTROLE / VESTÍGIOS"}</span>
+            <span>{mobileSidebarExpanded ? "▲" : "▼"}</span>
+          </button>
 
-            <div style={{ marginTop: 24, fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, marginBottom: 8, fontFamily: '"JetBrains Mono", monospace' }}>
-              RESOLUÇÃO DO SCANNER
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {(["fast", "standard", "high"] as const).map((mode) => {
-                const isActive = activeIntensity === mode;
-                const label = mode === "fast" ? "RÁPIDA (粗)" : mode === "standard" ? "PADRÃO (中)" : "ALTÍSSIMA (精)";
-                const desc = mode === "fast" ? "Varredura rápida / Baixa coesão" : mode === "standard" ? "Resolução padrão / Forense" : "Alta precisão / Mapeamento profundo";
-                const activeColor = mode === "fast" ? "#eab308" : mode === "standard" ? "#38bdf8" : "#6366f1";
-                
+          <div className={`scientific-sidebar-inner-content${mobileSidebarExpanded ? " mobile-expanded" : " mobile-collapsed"}`} style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-between" }}>
+            <div>
+              <div style={{ fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
+                PROVAS E VESTÍGIOS
+              </div>
+              {evidenceListToUse.map((ev) => {
+                const isSelected = ev.id === activeEvidence.id;
                 return (
-                  <button
-                    key={mode}
-                    disabled={scanning}
-                    onClick={() => handleIntensityChange(mode)}
+                  <div
+                    key={ev.id}
+                    onClick={() => handleSelectEvidence(ev)}
                     style={{
-                      textAlign: "left", padding: "6px 8px", borderRadius: 3,
-                      background: isActive ? `${activeColor}15` : "transparent",
-                      border: `1px solid ${isActive ? `${activeColor}50` : "transparent"}`,
+                      padding: "8px 10px", marginBottom: 6,
+                      background: isSelected ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                      border: isSelected ? "1px solid #38bdf850" : "1px solid transparent",
+                      borderRadius: 3, fontSize: 9,
+                      color: isSelected ? "#38bdf8" : "#94a3b8",
                       cursor: scanning ? "not-allowed" : "pointer",
-                      transition: "all 0.1s ease",
-                      outline: "none"
+                      letterSpacing: 0.5,
+                      display: "flex", alignItems: "center", gap: 8,
+                      transition: "all 0.2s ease"
                     }}
-                    className={scanning ? "" : "hover:bg-slate-800"}
+                    className={scanning ? "" : "hover:bg-slate-800 hover:text-sky-300"}
                   >
-                    <div style={{ fontSize: 8.5, fontWeight: "bold", color: isActive ? activeColor : "#64748b" }}>
-                      {isActive ? "▶ " : ""}{label}
+                    <span style={{ fontSize: 12 }}>{ev.icon}</span>
+                    <div style={{ flexGrow: 1 }}>
+                      <div style={{ fontWeight: "bold", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
+                        <span>{ev.id}</span>
+                      </div>
+                      <div style={{ fontSize: 8, opacity: 0.8 }}>{ev.label}</div>
                     </div>
-                    <div style={{ fontSize: 7, color: "#64748b", marginTop: 2, lineHeight: 1.2 }}>{desc}</div>
-                  </button>
+                  </div>
                 );
               })}
-            </div>
-          </div>
 
-          <div>
-            <div style={{ fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, fontFamily: '"JetBrains Mono", monospace' }}>SISTEMA DE DIAGNÓSTICO</div>
-            <div style={{ marginTop: 8, fontSize: 8, lineHeight: 1.8, color: "#94a3b8", fontFamily: '"JetBrains Mono", monospace' }}>
-              <div>INQUÉRITO: #{activeCase.code}</div>
-              <div>OPERADOR: {activeEvidence.data.labTech}</div>
-              <div>MODO: {activeIntensity.toUpperCase()}</div>
-              <div>PRECISÃO: {adjustedConfidence}%</div>
+              <div style={{ marginTop: 24, fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, marginBottom: 8, fontFamily: '"JetBrains Mono", monospace' }}>
+                RESOLUÇÃO DO SCANNER
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {(["fast", "standard", "high"] as const).map((mode) => {
+                  const isActive = activeIntensity === mode;
+                  const label = mode === "fast" ? "RÁPIDA (粗)" : mode === "standard" ? "PADRÃO (中)" : "ALTÍSSIMA (精)";
+                  const desc = mode === "fast" ? "Varredura rápida / Baixa coesão" : mode === "standard" ? "Resolução padrão / Forense" : "Alta precisão / Mapeamento profundo";
+                  const activeColor = mode === "fast" ? "#eab308" : mode === "standard" ? "#38bdf8" : "#6366f1";
+                  
+                  return (
+                    <button
+                      key={mode}
+                      disabled={scanning}
+                      onClick={() => handleIntensityChange(mode)}
+                      style={{
+                        textAlign: "left", padding: "6px 8px", borderRadius: 3,
+                        background: isActive ? `${activeColor}15` : "transparent",
+                        border: `1px solid ${isActive ? `${activeColor}50` : "transparent"}`,
+                        cursor: scanning ? "not-allowed" : "pointer",
+                        transition: "all 0.1s ease",
+                        outline: "none"
+                      }}
+                      className={scanning ? "" : "hover:bg-slate-800"}
+                    >
+                      <div style={{ fontSize: 8.5, fontWeight: "bold", color: isActive ? activeColor : "#64748b" }}>
+                        {isActive ? "▶ " : ""}{label}
+                      </div>
+                      <div style={{ fontSize: 7, color: "#64748b", marginTop: 2, lineHeight: 1.2 }}>{desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, fontFamily: '"JetBrains Mono", monospace' }}>SISTEMA DE DIAGNÓSTICO</div>
+              <div style={{ marginTop: 8, fontSize: 8, lineHeight: 1.8, color: "#94a3b8", fontFamily: '"JetBrains Mono", monospace' }}>
+                <div>INQUÉRITO: #{activeCase.code}</div>
+                <div>OPERADOR: {activeEvidence.data.labTech}</div>
+                <div>MODO: {activeIntensity.toUpperCase()}</div>
+                <div>PRECISÃO: {adjustedConfidence}%</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main Area */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div className="scientific-main-content" style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
           {/* Case investigation Tab group */}
-          <div style={{
+          <div className="scientific-tab-group" style={{
             display: "flex",
             background: "#0f172a",
             borderBottom: "1px solid #1e293b"
@@ -940,9 +1481,10 @@ export default function ForensicScanner({
                 cursor: "pointer",
                 outline: "none"
               }}
-              className="hover:text-sky-300 transition-colors"
+              className="scientific-tab-btn hover:text-sky-300 transition-colors"
             >
-              📋 DOSSIÊ CRIMINAL DO CASO
+              <span className="desktop-tab-label">📋 DOSSIÊ CRIMINAL DO CASO</span>
+              <span className="mobile-tab-label">📋 DOSSIÊ</span>
             </button>
             <button
               onClick={() => setActiveTab("SCANNER")}
@@ -959,14 +1501,15 @@ export default function ForensicScanner({
                 cursor: "pointer",
                 outline: "none"
               }}
-              className="hover:text-sky-300 transition-colors"
+              className="scientific-tab-btn hover:text-sky-300 transition-colors"
             >
-              🔍 DISPOSITIVO DE VARREDURA FORENSE ({filteredLocalEvidence.length} AMOSTRAS)
+              <span className="desktop-tab-label">🔍 DISPOSITIVO DE VARREDURA FORENSE ({filteredLocalEvidence.length} AMOSTRAS)</span>
+              <span className="mobile-tab-label">🔍 SCANNER FORENSE ({filteredLocalEvidence.length})</span>
             </button>
           </div>
 
           {activeTab === "DOSSIER" ? (
-            <div style={{
+            <div className="scientific-dossier-container" style={{
               flex: 1,
               padding: "24px",
               overflowY: "auto",
@@ -1100,10 +1643,10 @@ export default function ForensicScanner({
                 <div style={{ fontSize: 9, color: "#38bdf8", fontFamily: '"JetBrains Mono", monospace' }}>{current.progress}%</div>
               </div>
 
-              <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+              <div className="scanner-columns-wrapper" style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
                 {/* Scanner Area */}
-                <div style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div className="scanner-view-column" style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <div style={{
                     fontSize: 10, letterSpacing: 1.5, color: "#64748b",
                     marginBottom: 12, alignSelf: "flex-start", fontFamily: '"JetBrains Mono", monospace'
@@ -1162,7 +1705,7 @@ export default function ForensicScanner({
                 </div>
 
                 {/* Right Results Panel */}
-                <div style={{
+                <div className="scanner-results-column" style={{
                   width: 270, borderLeft: "1px solid #1e293b",
                   background: "#0d1527",
                   display: "flex", flexDirection: "column", overflow: "hidden",
@@ -1295,16 +1838,16 @@ ${activeEvidence.data.matches.map((s) => ` - ${s.name} (${s.classification}): ${
       </div>
 
       {/* Bottom status line */}
-      <div style={{
+      <div className="scientific-footer" style={{
         position: "fixed", bottom: 0, left: 0, right: 0,
         background: "#0b1329", borderTop: "1px solid #1e293b",
         padding: "6px 16px", display: "flex", gap: 20,
         fontSize: 8, color: "#64748b", letterSpacing: 1,
         zIndex: 10, fontFamily: '"JetBrains Mono", monospace'
       }}>
-        <span>RESOLUÇÃO: EXAME DE POLARIDADE 1:1 [FILTRADO]</span>
-        <span>MODO ANALÍTICO: {activeIntensity.toUpperCase()}</span>
-        <span style={{ marginLeft: "auto" }}>
+        <span className="footer-item-removable">RESOLUÇÃO: EXAME DE POLARIDADE 1:1 [FILTRADO]</span>
+        <span className="footer-item-removable">MODO ANALÍTICO: {activeIntensity.toUpperCase()}</span>
+        <span className="footer-item-status" style={{ marginLeft: "auto" }}>
           {complete ? `VARREDURA ${activeEvidence.id} COMPILADA — ENVIADA AO DOSSIÊ` : "SISTEMA SEGURO — AGUARDANDO COMANDO DE VARREDURA"}
         </span>
       </div>

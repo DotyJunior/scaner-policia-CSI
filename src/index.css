@@ -5,3 +5,170 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+/* Header display defaults for Desktop */
+.desktop-only-header {
+  display: flex !important;
+}
+.mobile-only-header {
+  display: none !important;
+}
+
+/* Default label displays for desktop */
+.mobile-tab-label {
+  display: none;
+}
+.desktop-tab-label {
+  display: inline;
+}
+
+/* Red alert point alert signal animation */
+@keyframes pulseRed {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+.pulsing-red-dot {
+  background-color: #ef4444;
+  animation: pulseRed 1.8s infinite ease-in-out;
+}
+
+/* Tablet Optimizations (Screens up to 1024px) */
+@media (max-width: 1024px) {
+  .scientific-sidebar {
+    width: 200px !important;
+  }
+}
+
+/* Smartphone Optimizations (Screens up to 768px) */
+@media (max-width: 768px) {
+  /* Prevent horizontal outer scroll & enable proper flow */
+  html, body, #root, .scientific-police-dashboard-root {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  /* OBJETIVO 03: Hide visual scrollbars on mobile devices, keeping the scrolling logic working */
+  *::-webkit-scrollbar {
+    display: none !important;
+  }
+  * {
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
+  }
+
+  /* Responsive Display overrides */
+  .desktop-only-header {
+    display: none !important;
+  }
+  .mobile-only-header {
+    display: flex !important;
+  }
+  .scientific-tab-group {
+    display: none !important;
+  }
+
+  /* Make main layout body stretch/stack naturally */
+  .scientific-body {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 45px);
+    overflow-y: auto !important;
+    padding-bottom: 50px !important;
+  }
+
+  /* Core Sidebar Responsiveness */
+  .scientific-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid #1e293b !important;
+    padding: 12px 16px !important;
+  }
+
+  /* Mobile sidebar toggle button trigger */
+  .mobile-sidebar-toggle {
+    display: flex !important;
+  }
+
+  /* Collapsible logic */
+  .scientific-sidebar-inner-content.mobile-collapsed {
+    display: none !important;
+  }
+  .scientific-sidebar-inner-content.mobile-expanded {
+    display: flex !important;
+    gap: 16px !important;
+    margin-top: 4px;
+  }
+
+  /* Dossier container padding */
+  .scientific-dossier-container {
+    padding: 14px !important;
+  }
+
+  /* Grid adaptation for small mobile */
+  .scientific-dossier-container > div[style*="display: grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Scanner screen flex layout direction */
+  .scanner-columns-wrapper {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    flex: none !important;
+    height: auto !important;
+  }
+
+  .scanner-view-column {
+    padding: 16px 12px !important;
+    flex: none !important;
+    width: 100% !important;
+  }
+
+  .scanner-results-column {
+    width: 100% !important;
+    border-left: none !important;
+    border-top: 1px solid #1e293b !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    flex: none !important;
+  }
+
+  /* Touch buttons optimization */
+  button, [role="button"] {
+    min-height: 38px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Reset layout button specific padding inside header */
+  #tools-menu-btn, #cases-menu-btn, .scientific-tab-btn {
+    min-height: auto !important;
+  }
+
+  /* Bottom status bar spacing & visibility optimization */
+  .scientific-footer {
+    font-size: 7.5px !important;
+    padding: 6px 12px !important;
+    gap: 8px !important;
+  }
+  .footer-item-removable {
+    display: none !important;
+  }
+  .footer-item-status {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
