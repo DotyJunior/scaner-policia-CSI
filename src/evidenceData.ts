@@ -6,7 +6,7 @@
 import { EvidenceCard } from "./types";
 
 // Highly stylized SVG of a latent thumbprint with ridge loop patterns
-const FINGERPRINT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
+export const FINGERPRINT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
   <!-- Fingerprint whorl ridges -->
   <path d="M 50,230 C 50,110 170,110 170,230" stroke="%2300ccff" stroke-width="1.8" stroke-opacity="0.32" stroke-dasharray="5,2"/>
   <path d="M 60,230 C 60,130 160,130 160,230" stroke="%2300ccff" stroke-width="1.8" stroke-opacity="0.45"/>
@@ -30,7 +30,7 @@ const FINGERPRINT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2
 </svg>`;
 
 // Highly stylized SVG of a bloodstain spatter drop
-const BLOODSTAIN_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
+export const BLOODSTAIN_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
   <!-- Bloodstain backdrop pattern -->
   <path d="M 110,130 C 130,130 155,160 155,200 C 155,240 130,270 110,270 C 90,270 65,240 65,200 C 65,160 90,130 110,130 Z" fill="%23cc0000" fill-opacity="0.1" stroke="%23cc0000" stroke-width="1.5" stroke-dasharray="3,3"/>
   <path d="M 110,140 C 124,140 142,165 142,195 C 142,225 124,250 110,250 C 96,250 78,225 78,195 C 78,165 96,140 110,140 Z" fill="%23b30000" fill-opacity="0.25" stroke="%23ff4444" stroke-width="1.2"/>
@@ -49,7 +49,7 @@ const BLOODSTAIN_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/20
 </svg>`;
 
 // Stylized DNA helix vector
-const DNA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
+export const DNA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
   <!-- Glowing DNA double helix -->
   <!-- Strand A -->
   <path d="M 50,60 Q 110,95 170,60 T 50,165 T 170,270 T 50,375 T 170,445" stroke="%2301ff88" stroke-width="2.2" stroke-opacity="0.8"/>
@@ -78,7 +78,7 @@ const DNA_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"
 </svg>`;
 
 // Stylized document sheet simulating a contract
-const DOC_CONTRACT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
+export const DOC_CONTRACT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
   <!-- Document paper background -->
   <rect x="25" y="30" width="170" height="400" rx="4" fill="%2306150e" stroke="%2300ff88" stroke-width="1.2" stroke-opacity="0.4"/>
   
@@ -159,7 +159,7 @@ const PALMPRINT_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/200
 </svg>`;
 
 // Stylized video monitoring display with face box
-const VIDEO_CCTV_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
+export const VIDEO_CCTV_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 460" fill="none">
   <!-- CCTV Framework grid -->
   <rect x="5" y="5" width="210" height="450" fill="none" stroke="%2300ff88" stroke-width="0.8" stroke-dasharray="8,4" stroke-opacity="0.2"/>
   

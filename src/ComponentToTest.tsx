@@ -400,19 +400,247 @@ class ForensicAudioController {
 }
 const audioController = new ForensicAudioController();
 
-import { EVIDENCE_CARDS as RAW_EVIDENCE_CARDS } from "./evidenceData";
+import {
+  EVIDENCE_CARDS as RAW_EVIDENCE_CARDS,
+  FINGERPRINT_SVG,
+  DNA_SVG,
+  DOC_CONTRACT_SVG,
+  VIDEO_CCTV_SVG,
+} from "./evidenceData";
 import { PREBUILT_CASES } from "./casosData";
 import { EvidenceCard, EvidenceResultCustom, Case } from "./types";
 
-export const EVIDENCE_CARDS: EvidenceCard[] = RAW_EVIDENCE_CARDS.map(card => {
-  if (card.scannerMode === "FOOTPRINT") {
-    return {
-      ...card,
-      image: FOOTPRINT_IMG,
-    };
+const DEFAULT_TEMPLATES = {
+  FOOTPRINT: {
+    icon: "🥾",
+    typeName: "PEGADA — SOLA PADRÃO",
+    labTech: "J. CHEN",
+    equipment: "FIS-SCAN 4000 v3.2",
+    defaultConfidence: 95.0,
+    parameters: [
+      { label: "STATUS", value: "ANALISADO" },
+      { label: "ARQUIVO ESPECTRO", value: "boot-spectral-standard.png" },
+      { label: "PADRÃO TREAD", value: "SULCOS GERAIS" },
+      { label: "LARGURA MÁXIMA", value: "11.0 cm" },
+      { label: "COMPRIMENTO", value: "35 cm" },
+    ],
+    matches: [
+      { name: "CALÇADO RESIDUAL DESCONHECIDO", classification: "Tamanho 42", pct: 95.0 },
+    ],
+    refPoints: [
+      { x: 110, y: 50 }, { x: 90, y: 150 }, { x: 130, y: 150 }, { x: 110, y: 250 }, { x: 110, y: 350 }
+    ],
+    dimensions: {
+      hLine: { x1: 60, y1: 50, x2: 160, y2: 50, label: "11.0 cm" },
+      vLine: { x1: 30, y1: 50, x2: 30, y2: 350, label: "35 cm" },
+    },
+    stages: [
+      { id: "idle", label: "SISTEMA PRONTO", progress: 0 },
+      { id: "init", label: "INICIALIZANDO VARREDURA...", progress: 10 },
+      { id: "depth", label: "MAPEANDO PROFUNDIDADE...", progress: 35 },
+      { id: "pattern", label: "DETECTANDO PADRÃO DE SOLA...", progress: 62 },
+      { id: "reference", label: "MAPEANDO PONTOS DE REFERÊNCIA...", progress: 78 },
+      { id: "database", label: "CONSULTANDO BASE DE DADOS...", progress: 90 },
+      { id: "complete", label: "ANÁLISE CONCLUÍDA", progress: 100 },
+    ],
+    logs: [
+      "> boot sequence FIS-SCAN 4000 v3.2",
+      "> UV emitter: ACTIVE",
+      "> BEGIN SCAN SEQUENCE...",
+      "> detecting sole geometry...",
+      "> generating reference grid...",
+      "> MATCH FOUND — confidence 95%",
+      "> ANALYSIS COMPLETE"
+    ],
+    image: "",
+  },
+  DNA: {
+    icon: "🧬",
+    typeName: "DNA — PERFIL AUTOSSÔMICO",
+    labTech: "DRA. L. ALMEIDA",
+    equipment: "GENO-SCANNER GENAX-IV",
+    defaultConfidence: 99.9,
+    parameters: [
+      { label: "STATUS", value: "SEQ_CONCLUÍDO" },
+      { label: "DENSIDADE CODS", value: "16 LOCI STR DETECTADOS" },
+    ],
+    matches: [
+      { name: "PERFIL COINTEGRAÇÃO (CODIS)", classification: "Grau Parentesco Alto", pct: 99.9 },
+    ],
+    refPoints: [
+      { x: 110, y: 112 }, { x: 110, y: 218 }, { x: 110, y: 322 }, { x: 110, y: 428 }
+    ],
+    dimensions: {
+      hLine: { x1: 50, y1: 60, x2: 170, y2: 60, label: "Span: 12 nm" },
+    },
+    stages: [
+      { id: "idle", label: "SISTEMA GENÔMICO PRONTO", progress: 0 },
+      { id: "init", label: "AMPLIFICANDO PROTEÍNA VIA PCR...", progress: 20 },
+      { id: "depth", label: "ISOLANDO LINGUAGEM DE ALELOS...", progress: 50 },
+      { id: "database", label: "BUSCANDO COMBINAÇÕES GENÉTICAS...", progress: 90 },
+      { id: "complete", label: "SEQUENCIAMENTO CONCLUÍDO", progress: 100 },
+    ],
+    logs: [
+      "> initializing PCR sequence...",
+      "> target loci amplification: CSF1PO, FGA, TH01 -- OK",
+      "> database lookup on national DNA register...",
+      "> GENETIC ANALYSIS COMPLETE"
+    ],
+    image: "",
+  },
+  DOCUMENT: {
+    icon: "📄",
+    typeName: "GRAFOLOGIA — ASSINATURA E TINTA",
+    labTech: "PADRE IGNACIO (PERITO)",
+    equipment: "DOC-EXAMINER SPECTRUM-5",
+    defaultConfidence: 94.0,
+    parameters: [
+      { label: "STATUS", value: "ANALISADO" },
+      { label: "EXAME GRAFOSCÓPICO", value: "SUPORTE FÍSICO DETECTADO" },
+    ],
+    matches: [
+      { name: "MATRIZ DOCUMENTAL INTEGRAL", classification: "Falsidade de Punho", pct: 94.0 },
+    ],
+    refPoints: [
+      { x: 110, y: 170 }, { x: 150, y: 310 }
+    ],
+    dimensions: {
+      hLine: { x1: 35, y1: 170, x2: 180, y2: 170, label: "Analysis zone" },
+    },
+    stages: [
+      { id: "idle", label: "ESCANER ESPECTRAL PRONTO", progress: 0 },
+      { id: "init", label: "LUMINOL ULTRAVIOLETA ATIVO...", progress: 20 },
+      { id: "depth", label: "MAPEANDO SULCO E PRESSÃO DE ESCRITA...", progress: 50 },
+      { id: "database", label: "DECODIFICANDO QUÍMICA DO CORANTE da TINTA...", progress: 90 },
+      { id: "complete", label: "LAUDO GERADO: DOCUMENTO ANALIZADO", progress: 100 },
+    ],
+    logs: [
+      "> activating document backlight scanner...",
+      "> ink formulation analysis: continuous check...",
+      "> signatures cross-match analyzer: active stroke depth scan...",
+      "> LAUDO EXTRAÍDO COM SUCESSO"
+    ],
+    image: "",
+  },
+  DIGITAL: {
+    icon: "🫵",
+    typeName: "LATENTE — IMPRESSÃO COMPLEMENTAR",
+    labTech: "J. CHEN",
+    equipment: "FIS-SCAN 4000 v3.2",
+    defaultConfidence: 98.0,
+    parameters: [
+      { label: "STATUS", value: "ANALISADO" },
+      { label: "VARIAÇÃO GERAL", value: "PADRÃO ULNAR/RIDGE" },
+    ],
+    matches: [
+      { name: "MARCA BIOMÉTRICA COINCIDENTE", classification: "Frequência Relativa 98%", pct: 98.0 },
+    ],
+    refPoints: [
+      { x: 110, y: 190 }, { x: 140, y: 275 }, { x: 80, y: 230 }, { x: 140, y: 230 }
+    ],
+    dimensions: {
+      hLine: { x1: 60, y1: 230, x2: 160, y2: 230, label: "Whorl Span: 20 mm" },
+    },
+    stages: [
+      { id: "idle", label: "ANALISADOR PRONTO", progress: 0 },
+      { id: "init", label: "CONTRASTE DE LUMINOL DIGITAL...", progress: 20 },
+      { id: "depth", label: "PROCESSO DE AFINAMENTO DE CRISTAS...", progress: 50 },
+      { id: "reference", label: "MAPEAR ILHAS E BIFURCAÇÕES...", progress: 85 },
+      { id: "complete", label: "RECONHECIMENTO COMPLETO", progress: 100 },
+    ],
+    logs: [
+      "> boot sequence FIS-SCAN 4000 v3.2",
+      "> AFIS bosegmentation module online",
+      "> running binarization algorithms...",
+      "> morphological thinning filter triggered: complete",
+      "> detecting bifurcation minutiae...",
+      "> database match verified"
+    ],
+    image: "",
+  },
+  VIDEO: {
+    icon: "📹",
+    typeName: "VÍDEO — VETOR MULTI-FRAME",
+    labTech: "SGT. FELIPE SANTOS",
+    equipment: "DECONVOLUTION ENGINE v1.0",
+    defaultConfidence: 95.0,
+    parameters: [
+      { label: "STATUS", value: "RECONSTITUÍDO" },
+      { label: "FILTRAÇÃO RUIDO", value: "RESOLVIDO" },
+    ],
+    matches: [
+      { name: "CADASTRO FACIAL COINCIDENTE", classification: "Vetor Facemapping 95%", pct: 95.0 },
+    ],
+    refPoints: [
+      { x: 95, y: 170 }, { x: 125, y: 170 }, { x: 110, y: 195 }
+    ],
+    dimensions: {
+      hLine: { x1: 65, y1: 125, x2: 155, y2: 125, label: "Face box: 90px" },
+    },
+    stages: [
+      { id: "idle", label: "DESBLUR VETORIAL PRONTO", progress: 0 },
+      { id: "init", label: "INDEXANDO SEQUÊNCIA DE FRAMES DE VÍDEO...", progress: 20 },
+      { id: "depth", label: "RESOLVENDO MATRIZ DE DECONVOLUÇÃO...", progress: 50 },
+      { id: "database", label: "DILIGÊNCIA NO REGISTRO CRIMINAL POLICIAL...", progress: 90 },
+      { id: "complete", label: "DECONVOLUÇÃO VETORIAL EFETIVADA", progress: 100 },
+    ],
+    logs: [
+      "> buffering temporal video frames...",
+      "> calculating motion vector blur kernel...",
+      "> facial keypoints mapped -- OK",
+      "> matching against mugshot database -- MATCH COMPONENT"
+    ],
+    image: "",
+  },
+};
+
+export function normalizeEvidenceCard(card: EvidenceCard): EvidenceCard {
+  if (!card) return card;
+  const mode = card.scannerMode || "FOOTPRINT";
+  const defaults = DEFAULT_TEMPLATES[mode] || DEFAULT_TEMPLATES.FOOTPRINT;
+
+  const normalizedData: EvidenceResultCustom = {
+    id: card.id,
+    title: card.data?.title || `${card.label.toUpperCase()} — DETECTED`,
+    typeName: card.data?.typeName || defaults.typeName,
+    labTech: card.data?.labTech || defaults.labTech,
+    equipment: card.data?.equipment || defaults.equipment,
+    defaultConfidence: card.data?.defaultConfidence ?? defaults.defaultConfidence,
+    parameters: card.data?.parameters || defaults.parameters,
+    matches: card.data?.matches || defaults.matches,
+    refPoints: card.data?.refPoints || defaults.refPoints,
+    dimensions: card.data?.dimensions || defaults.dimensions,
+    stages: card.data?.stages || defaults.stages,
+    logs: card.data?.logs || defaults.logs,
+  };
+
+  let finalImage = card.image;
+  if (!finalImage) {
+    if (mode === "FOOTPRINT") {
+      finalImage = FOOTPRINT_IMG;
+    } else if (mode === "DNA") {
+      finalImage = DNA_SVG;
+    } else if (mode === "DOCUMENT") {
+      finalImage = DOC_CONTRACT_SVG;
+    } else if (mode === "DIGITAL") {
+      finalImage = FINGERPRINT_SVG;
+    } else if (mode === "VIDEO") {
+      finalImage = VIDEO_CCTV_SVG;
+    } else {
+      finalImage = "";
+    }
   }
-  return card;
-});
+
+  return {
+    ...card,
+    icon: card.icon || defaults.icon,
+    image: finalImage,
+    scannerMode: mode,
+    data: normalizedData,
+  };
+}
+
+export const EVIDENCE_CARDS: EvidenceCard[] = RAW_EVIDENCE_CARDS.map(normalizeEvidenceCard);
 
 interface ForensicScannerProps {
   evidence?: EvidenceCard;
@@ -466,7 +694,7 @@ export default function ForensicScanner({
   const [internalEvidence, setInternalEvidence] = useState<EvidenceCard>(
     filteredLocalEvidence[0] || EVIDENCE_CARDS.find((c) => activeCase.evidenceIds.includes(c.id)) || EVIDENCE_CARDS[0]
   );
-  const activeEvidence = evidence || internalEvidence;
+  const activeEvidence = normalizeEvidenceCard(evidence || internalEvidence);
 
   const [internalIntensity, setInternalIntensity] = useState<"fast" | "standard" | "high">("standard");
   const activeIntensity = scanIntensity || internalIntensity;

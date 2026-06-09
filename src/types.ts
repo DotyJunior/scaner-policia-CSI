@@ -37,10 +37,10 @@ export interface EvidenceResultCustom {
 export interface EvidenceCard {
   id: string;
   label: string;
-  icon: string;
-  image: string; // SVG or Base64
+  icon?: string;
+  image?: string; // SVG or Base64
   scannerMode?: "FOOTPRINT" | "DNA" | "DOCUMENT" | "DIGITAL" | "VIDEO";
-  data: EvidenceResultCustom;
+  data?: EvidenceResultCustom;
   userId?: string;
 }
 
