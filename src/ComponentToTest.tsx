@@ -1133,7 +1133,8 @@ export default function ForensicScanner({
           </div>
           {/* Static/Status right text info */}
           <div style={{
-            background: "#1b2e47",
+            background: "#0d1117",
+            borderColor: "#101115",
             padding: "4px 6px 3px 6px",
             color: "#758cd5",
             fontSize: "6.5px",
@@ -1162,7 +1163,7 @@ export default function ForensicScanner({
             borderRadius: "0 0 6px 6px",
             marginTop: "-1px",
             padding: "16px 12px 14px 12px",
-            background: "rgba(11, 19, 41, 0.5)",
+            background: "#182335",
             display: "flex",
             flexDirection: "column",
             gap: "18px",
