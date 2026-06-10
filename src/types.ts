@@ -50,6 +50,18 @@ export interface Suspect {
   avatar: string;
   details: string;
   image?: string;
+  fullName?: string;
+  gender?: string;
+  age?: string;
+  weight?: string;
+  occupation?: string;
+  status?: string;
+  criminalId?: string;
+  height?: string;
+  riskLevel?: string;
+  investigationStatus?: string;
+  physicalTraits?: string;
+  notes?: string;
 }
 
 export interface Case {

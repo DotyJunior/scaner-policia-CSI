@@ -408,7 +408,7 @@ import {
   VIDEO_CCTV_SVG,
 } from "./evidenceData";
 import { PREBUILT_CASES } from "./casosData";
-import { EvidenceCard, EvidenceResultCustom, Case } from "./types";
+import { EvidenceCard, EvidenceResultCustom, Case, Suspect } from "./types";
 
 const DEFAULT_TEMPLATES = {
   FOOTPRINT: {
@@ -718,6 +718,593 @@ const SuspectAvatar = ({ suspect }: { suspect: any }) => {
   );
 };
 
+const SuspectDetailsModal = ({ suspect, onClose }: { suspect: Suspect; onClose: () => void }) => {
+  const [modalSrc, setModalSrc] = useState<string | undefined>(suspect.image);
+  const [useFallback, setUseFallback] = useState<boolean>(!suspect.image);
+
+  const handleImgError = () => {
+    if (suspect.image && modalSrc === suspect.image && !suspect.image.includes("/Fotos/")) {
+      const directoryMatch = suspect.image.match(/(Suspeito_\d+)\//);
+      if (directoryMatch) {
+        const targetDir = directoryMatch[1];
+        const nextSrc = suspect.image.replace(`${targetDir}/`, `${targetDir}/Fotos/`);
+        setModalSrc(nextSrc);
+        return;
+      }
+    }
+    setUseFallback(true);
+  };
+
+  const rulerHeights = ["1.90", "1.80", "1.70", "1.60", "1.50", "1.40", "1.30"];
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "rgba(4, 4, 12, 0.85)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px"
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "420px",
+          height: "580px",
+          maxHeight: "90vh",
+          background: "#080b11",
+          border: "2px solid #38bdf8",
+          boxShadow: "0 0 25px rgba(56, 189, 248, 0.35), inset 0 0 15px rgba(15, 23, 42, 0.9)",
+          borderRadius: "10px",
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "14px",
+          boxSizing: "border-box",
+          overflow: "hidden"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            width: "28px",
+            height: "28px",
+            borderRadius: "50%",
+            border: "1px solid #1e293b",
+            background: "rgba(15, 23, 42, 0.8)",
+            color: "#94a3b8",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            fontSize: "12px",
+            fontWeight: "bold",
+            transition: "all 0.2s",
+            zIndex: 100
+          }}
+          className="hover:border-red-500 hover:text-red-400"
+        >
+          ✕
+        </button>
+
+        {/* Mugshot Photo Frame */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "262px",
+            background: "#0c0f16",
+            border: "1px solid #1e293b",
+            borderRadius: "6px",
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            flexShrink: 0
+          }}
+        >
+          {/* Ruler Backdrop Lines */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              padding: "16px 0",
+              boxSizing: "border-box"
+            }}
+          >
+            {rulerHeights.map((h, idx) => (
+              <div
+                key={idx}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "1px",
+                  background: "rgba(148, 163, 184, 0.15)"
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "8px",
+                    top: "-6px",
+                    fontSize: "8px",
+                    fontFamily: '"JetBrains Mono", monospace',
+                    color: "rgba(148, 163, 184, 0.45)"
+                  }}
+                >
+                  {h}
+                </span>
+                <span
+                  style={{
+                    position: "absolute",
+                    right: "8px",
+                    top: "-6px",
+                    fontSize: "8px",
+                    fontFamily: '"JetBrains Mono", monospace',
+                    color: "rgba(148, 163, 184, 0.45)"
+                  }}
+                >
+                  {h}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Suspect Photo */}
+          {!useFallback && modalSrc ? (
+            <img
+              src={modalSrc}
+              alt={suspect.name}
+              onError={handleImgError}
+              style={{
+                height: "90%",
+                width: "auto",
+                objectFit: "contain",
+                zIndex: 10,
+                position: "relative"
+              }}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span
+              style={{
+                fontSize: "120px",
+                lineHeight: 1,
+                alignSelf: "center",
+                zIndex: 10,
+                color: "rgba(148, 163, 184, 0.3)"
+              }}
+            >
+              {suspect.avatar}
+            </span>
+          )}
+
+          {/* Overlaid Label "Suspeito - 0X" */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "8px",
+              left: "12px",
+              fontSize: "12px",
+              fontWeight: "600",
+              fontStyle: "italic",
+              fontFamily: '"Space Grotesk", sans-serif',
+              color: "#f1f5f9",
+              background: "rgba(15, 23, 42, 0.75)",
+              border: "1px solid #334155",
+              borderRadius: "3px",
+              padding: "2px 8px",
+              zIndex: 20,
+              textTransform: "uppercase"
+            }}
+          >
+            {suspect.role}
+          </div>
+        </div>
+
+        {/* Name Block */}
+        <div
+          style={{
+            background: "rgba(30, 41, 59, 0.25)",
+            border: "1px solid #1e293b",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            display: "flex",
+            flexDirection: "column",
+            flexShrink: 0
+          }}
+        >
+          <div
+            style={{
+              fontSize: "8px",
+              fontFamily: '"JetBrains Mono", monospace',
+              color: "#38bdf8",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              fontWeight: "bold",
+              marginBottom: "3px"
+            }}
+          >
+            Name:
+          </div>
+          <div
+            style={{
+              fontSize: "15px",
+              fontWeight: "bold",
+              color: "#f1f5f9",
+              letterSpacing: "0.5px"
+            }}
+          >
+            {suspect.fullName || suspect.name}
+          </div>
+        </div>
+
+        {/* Scrollable Container with custom scrollbar */}
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            paddingRight: "6px"
+          }}
+          className="custom-suspect-scrollbar"
+        >
+          {/* SEXO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              SEXO:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.gender || "Não informado"}
+            </span>
+          </div>
+
+          {/* IDADE & PESO */}
+          <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                background: "rgba(30, 41, 59, 0.15)",
+                border: "1px solid #1e293b",
+                borderRadius: "4px",
+                padding: "6px 10px"
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "9px",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  color: "#38bdf8",
+                  fontWeight: "bold",
+                  marginRight: "8px",
+                  textTransform: "uppercase"
+                }}
+              >
+                IDADE:
+              </span>
+              <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+                {suspect.age || "Não informado"}
+              </span>
+            </div>
+
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                background: "rgba(30, 41, 59, 0.15)",
+                border: "1px solid #1e293b",
+                borderRadius: "4px",
+                padding: "6px 10px"
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "9px",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  color: "#38bdf8",
+                  fontWeight: "bold",
+                  marginRight: "8px",
+                  textTransform: "uppercase"
+                }}
+              >
+                PESO:
+              </span>
+              <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+                {suspect.weight || "Não informado"}
+              </span>
+            </div>
+          </div>
+
+          {/* Profissão */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Profissão:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.occupation || "Não informado"}
+            </span>
+          </div>
+
+          {/* ID CRIMINAL */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              ID CRIMINAL:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1", fontFamily: '"JetBrains Mono", monospace' }}>
+              {suspect.criminalId || "Não informado"}
+            </span>
+          </div>
+
+          {/* ALTURA */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              ALTURA:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.height || "Não informado"}
+            </span>
+          </div>
+
+          {/* NÍVEL DE RISCO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Nível de Risco:
+            </span>
+            <span 
+              style={{ 
+                fontSize: "11px", 
+                fontWeight: "bold",
+                color: suspect.riskLevel?.toUpperCase() === "ALTO" ? "#ef4444" : 
+                       suspect.riskLevel?.toUpperCase() === "MÉDIO" || suspect.riskLevel?.toUpperCase() === "MEDIO" ? "#f59e0b" : 
+                       suspect.riskLevel?.toUpperCase() === "BAIXO" ? "#10b981" : "#cbd5e1"
+              }}
+            >
+              {suspect.riskLevel || "Não informado"}
+            </span>
+          </div>
+
+          {/* STATUS DA INVESTIGAÇÃO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Status de Investigação:
+            </span>
+            <span style={{ fontSize: "11px", color: "#f8fafc", fontWeight: "600" }}>
+              {suspect.investigationStatus || "Não informado"}
+            </span>
+          </div>
+
+          {/* Situação Atual */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              background: "rgba(14, 165, 233, 0.05)",
+              border: "1px solid rgba(56, 189, 248, 0.2)",
+              borderRadius: "4px",
+              padding: "10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                fontStyle: "italic",
+                marginBottom: "4px"
+              }}
+            >
+              Situação Atual:
+            </span>
+            <div style={{ fontSize: "10.5px", color: "#cbd5e1", lineHeight: 1.4 }}>
+              {suspect.status || "Não informado"}
+            </div>
+          </div>
+
+          {/* Características Físicas */}
+          {suspect.physicalTraits && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                background: "rgba(30, 41, 59, 0.15)",
+                border: "1px solid #1e293b",
+                borderRadius: "4px",
+                padding: "8px 10px",
+                flexShrink: 0
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "9px",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  color: "#38bdf8",
+                  fontWeight: "bold",
+                  marginBottom: "4px",
+                  textTransform: "uppercase"
+                }}
+              >
+                Características Físicas:
+              </span>
+              <div style={{ fontSize: "10px", color: "#cbd5e1", lineHeight: 1.4, whiteSpace: "pre-line" }}>
+                {suspect.physicalTraits}
+              </div>
+            </div>
+          )}
+
+          {/* Observações / Descrição atual */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              background: "rgba(148, 163, 184, 0.03)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "8.5px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#64748b",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "4px"
+              }}
+            >
+              Laudo de Registro / Detalhes:
+            </span>
+            <div style={{ fontSize: "10px", color: "#94a3b8", lineHeight: 1.4, whiteSpace: "pre-line" }}>
+              {suspect.notes || suspect.details || "Não informado"}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
 export default function ForensicScanner({
   evidence,
   evidenceList,
@@ -731,6 +1318,7 @@ export default function ForensicScanner({
 
   // Prebuilt Cases and Tab Navigation states
   const [activeCase, setActiveCase] = useState<Case>(PREBUILT_CASES[0]);
+  const [selectedSuspect, setSelectedSuspect] = useState<Suspect | null>(null);
   const [showCasesDropdown, setShowCasesDropdown] = useState(false);
   const [activeTab, setActiveTab] = useState<"DOSSIER" | "SCANNER">("DOSSIER");
   const [showBriefingPanel, setShowBriefingPanel] = useState(true);
@@ -920,7 +1508,7 @@ export default function ForensicScanner({
         display: "flex", alignItems: "center",
         borderBottom: "1px solid #1e293b",
         padding: "10px 20px", height: 45,
-        background: "#0f172a", boxSizing: "border-box"
+        background: "#10131d", boxSizing: "border-box"
       }}>
         <div className="decoration-dots" style={{ display: "flex", gap: 6, marginRight: 16 }}>
           {["#38bdf8", "#64748b", "#94a3b8"].map((c) => (
@@ -1030,7 +1618,7 @@ export default function ForensicScanner({
               setShowToolsDropdown(false);
             }}
             style={{
-              background: "#1e293b",
+              background: "#38384b",
               border: "1px solid #334155",
               color: "#38bdf8",
               fontFamily: '"JetBrains Mono", monospace',
@@ -1632,7 +2220,7 @@ export default function ForensicScanner({
 
         {/* Sidebar */}
         <div className="scientific-sidebar" style={{
-          width: 220, background: "#0b1329",
+          width: 220, background: "#1e1e2a",
           borderRight: "1px solid #1e293b",
           padding: "16px 12px", flexShrink: 0,
           display: "flex", flexDirection: "column",
@@ -1665,7 +2253,7 @@ export default function ForensicScanner({
             <span>{mobileSidebarExpanded ? "▲" : "▼"}</span>
           </button>
 
-          <div className={`scientific-sidebar-inner-content${mobileSidebarExpanded ? " mobile-expanded" : " mobile-collapsed"}`} style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-between" }}>
+          <div className={`scientific-sidebar-inner-content${mobileSidebarExpanded ? " mobile-expanded" : " mobile-collapsed"}`} style={{ display: "flex", flexDirection: "column", flexGrow: 1, justifyContent: "space-between", background: "#0a1220" }}>
             <div>
               <div style={{ fontSize: 9, color: "#64748b", fontWeight: "bold", letterSpacing: 1.5, marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
                 PROVAS E VESTÍGIOS
@@ -1803,7 +2391,8 @@ export default function ForensicScanner({
               flex: 1,
               padding: "24px",
               overflowY: "auto",
-              background: "#090d16"
+              background: "#0a0a0a",
+              borderColor: "#4e7ba6"
             }}>
               {/* Case Header Card */}
               <div style={{
@@ -1841,7 +2430,21 @@ export default function ForensicScanner({
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {activeCase.suspects.map((suspect) => (
-                      <div key={suspect.name} style={{ display: "flex", gap: "12px", background: "rgba(30, 41, 59, 0.2)", border: "1px solid #334155", borderRadius: 3, padding: "10px", transition: "all 0.2s" }} className="hover:border-slate-500">
+                      <div
+                        key={suspect.name}
+                        onClick={() => setSelectedSuspect(suspect)}
+                        style={{
+                          display: "flex",
+                          gap: "12px",
+                          background: "rgba(30, 41, 59, 0.2)",
+                          border: "1px solid #334155",
+                          borderRadius: 3,
+                          padding: "10px",
+                          cursor: "pointer",
+                          transition: "all 0.2s"
+                        }}
+                        className="hover:border-sky-500 hover:bg-slate-900/60 transition-all duration-200"
+                      >
                         <SuspectAvatar suspect={suspect} />
                         <div>
                           <div style={{ fontSize: "10px", fontWeight: "bold", color: "#f1f5f9" }}>{suspect.name}</div>
@@ -1936,7 +2539,7 @@ export default function ForensicScanner({
               <div className="scanner-columns-wrapper" style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
                 {/* Scanner Area */}
-                <div className="scanner-view-column" style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div className="scanner-view-column" style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center", background: "#040407" }}>
                   <div style={{
                     fontSize: 10, letterSpacing: 1.5, color: "#64748b",
                     marginBottom: 12, alignSelf: "flex-start", fontFamily: '"JetBrains Mono", monospace'
@@ -2141,6 +2744,13 @@ ${activeEvidence.data.matches.map((s) => ` - ${s.name} (${s.classification}): ${
           {complete ? `VARREDURA ${activeEvidence.id} COMPILADA — ENVIADA AO DOSSIÊ` : "SISTEMA SEGURO — AGUARDANDO COMANDO DE VARREDURA"}
         </span>
       </div>
+
+      {selectedSuspect && (
+        <SuspectDetailsModal
+          suspect={selectedSuspect}
+          onClose={() => setSelectedSuspect(null)}
+        />
+      )}
     </div>
   );
 }
