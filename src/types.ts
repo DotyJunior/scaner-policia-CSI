@@ -49,6 +49,7 @@ export interface Suspect {
   role: string;
   avatar: string;
   details: string;
+  image?: string;
 }
 
 export interface Case {

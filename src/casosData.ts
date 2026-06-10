@@ -92,5 +92,51 @@ export const PREBUILT_CASES: Case[] = [
       }
     ],
     evidenceIds: ["DOC-2023-11-05", "DP-2023-11-15", "VID-2023-11-21"]
+  },
+  {
+    id: "caso_01_narcoticos",
+    name: "Caso 01 - Operação Narcóticos",
+    code: "CSI-2026-04",
+    description: "Investigação de tráfico de entorpecentes em um galpão industrial abandonado. Múltiplas evidências digitais, genéticas, documentais e físicas foram coletadas no local. Seu objetivo é cruzar as análises forenses para identificar os envolvidos no esquema.",
+    difficulty: "Difícil",
+    date: "10/06/2026",
+    suspects: [
+      {
+        name: "Marcos Vinícius Almeida",
+        role: "Suspeito 01",
+        avatar: "👤",
+        details: "Impressões digitais encontradas nas superfícies do galpão (digital_01.png). Cadastro estadual BR-INV-0837.",
+        image: "/CASOS/caso_01_narcoticos/suspeitos/Suspeito_01/suspeito_01_foto_frente.png"
+      },
+      {
+        name: "Suspeito 02",
+        role: "Suspeito 02",
+        avatar: "👤",
+        details: "Registros e fotos sob investigação no arquivo do caso.",
+        image: "/CASOS/caso_01_narcoticos/suspeitos/Suspeito_02/foto_Frente.png"
+      },
+      {
+        name: "Suspeito 03",
+        role: "Suspeito 03",
+        avatar: "👤",
+        details: "Membro citado nas investigações de campo do galpão industrial.",
+        image: "/CASOS/caso_01_narcoticos/suspeitos/Suspeito_03/suspeito_03_foto_frente.png"
+      },
+      {
+        name: "Eduardo Henrique Batista",
+        role: "Suspeito 04",
+        avatar: "👤",
+        details: "Apresentou correspondência parcial/inconclusiva nas impressões digitais. Cadastro estadual BR-INV-0863.",
+        image: "/CASOS/caso_01_narcoticos/suspeitos/Suspeito_04/suspeito_04_foto_frente.png"
+      },
+      {
+        name: "Suspeito 05",
+        role: "Suspeito 05",
+        avatar: "👤",
+        details: "Registros sob suspeita de envolvimento na logística do galpão.",
+        image: "/CASOS/caso_01_narcoticos/suspeitos/Suspeito_05/suspeito_05_foto_frente.png"
+      }
+    ],
+    evidenceIds: ["DIG-001"]
   }
 ];

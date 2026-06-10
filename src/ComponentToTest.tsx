@@ -657,6 +657,67 @@ const adjustConfidence = (base: number, intensity: "fast" | "standard" | "high")
   return base;
 };
 
+const SuspectAvatar = ({ suspect }: { suspect: any }) => {
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>(suspect.image);
+  const [useFallback, setUseFallback] = useState<boolean>(!suspect.image);
+
+  const handleError = () => {
+    if (suspect.image && currentSrc === suspect.image && !suspect.image.includes("/Fotos/")) {
+      const directoryMatch = suspect.image.match(/(Suspeito_\d+)\//);
+      if (directoryMatch) {
+        const targetDir = directoryMatch[1];
+        const nextSrc = suspect.image.replace(`${targetDir}/`, `${targetDir}/Fotos/`);
+        setCurrentSrc(nextSrc);
+        return;
+      }
+    }
+    setUseFallback(true);
+  };
+
+  if (!useFallback && currentSrc) {
+    return (
+      <div style={{ 
+        width: "55px", 
+        height: "70px", 
+        flexShrink: 0, 
+        borderRadius: "3px", 
+        overflow: "hidden", 
+        border: "1px solid #334155",
+        background: "rgba(0,0,0,0.3)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
+        <img
+          src={currentSrc}
+          alt={suspect.name}
+          onError={handleError}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          referrerPolicy="no-referrer"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <span style={{ 
+      fontSize: "24px", 
+      alignSelf: "center", 
+      width: "55px", 
+      height: "70px", 
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center",
+      background: "rgba(30, 41, 59, 0.4)",
+      borderRadius: "3px",
+      border: "1px solid #1e293b",
+      flexShrink: 0
+    }}>
+      {suspect.avatar}
+    </span>
+  );
+};
+
 export default function ForensicScanner({
   evidence,
   evidenceList,
@@ -1781,7 +1842,7 @@ export default function ForensicScanner({
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {activeCase.suspects.map((suspect) => (
                       <div key={suspect.name} style={{ display: "flex", gap: "12px", background: "rgba(30, 41, 59, 0.2)", border: "1px solid #334155", borderRadius: 3, padding: "10px", transition: "all 0.2s" }} className="hover:border-slate-500">
-                        <span style={{ fontSize: "24px", alignSelf: "center" }}>{suspect.avatar}</span>
+                        <SuspectAvatar suspect={suspect} />
                         <div>
                           <div style={{ fontSize: "10px", fontWeight: "bold", color: "#f1f5f9" }}>{suspect.name}</div>
                           <div style={{ fontSize: "8px", color: "#38bdf8", fontFamily: '"JetBrains Mono", monospace', textTransform: "uppercase", letterSpacing: 0.5, marginBottom: "4px" }}>{suspect.role}</div>

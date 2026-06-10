@@ -735,5 +735,61 @@ export const EVIDENCE_CARDS: EvidenceCard[] = [
         "> plate match confirmed against national vehicle DMV file"
       ]
     }
+  },
+  {
+    id: "DIG-001",
+    label: "Digital Latente - Galpão (digital_01.png)",
+    icon: "🫵",
+    image: "/CASOS/caso_01_narcoticos/digitais/digital_01.png",
+    scannerMode: "DIGITAL",
+    data: {
+      id: "DIG-001",
+      title: "EXTRACÇÃO DE MINÚCIAS — CASO NARCÓTICOS",
+      typeName: "LATENTE — ALÇA",
+      labTech: "J. CHEN",
+      equipment: "FIS-SCAN 4000 v3.2",
+      defaultConfidence: 91.4,
+      parameters: [
+        { label: "STATUS", value: "ANALISADO" },
+        { label: "ARQUIVO FONTE", value: "digital_01.png" },
+        { label: "MÉTODO FORENSE", value: "Análise Papiloscópica (DIG-001)" },
+        { label: "MINÚCIAS DETECTADAS", value: "47 pontos catalogados" },
+        { label: "PONTOS COINCIDENTES", value: "18 correspondências confirmadas" },
+        { label: "QUALIDADE AMOSTRA", value: "Boa" },
+        { label: "SULCOS E CRISTAS", value: "Nível de detalhe alto" }
+      ],
+      matches: [
+        { name: "MARCOS VINÍCIUS ALMEIDA", classification: "Compatível (91.4%)", pct: 91.4 },
+        { name: "EDUARDO HENRIQUE BATISTA", classification: "Inconclusivo (42.1%)", pct: 42.1 }
+      ],
+      refPoints: [
+        { x: 105, y: 185 }, { x: 110, y: 220 }, { x: 125, y: 240 }, { x: 95, y: 155 },
+        { x: 130, y: 175 }, { x: 115, y: 260 }, { x: 85, y: 210 }, { x: 140, y: 200 }
+      ],
+      dimensions: {
+        hLine: { x1: 50, y1: 220, x2: 170, y2: 220, label: "Largura: 21 mm" },
+        vLine: { x1: 110, y1: 120, x2: 110, y2: 320, label: "Altura: 34 mm" },
+        heelLine: { x1: 85, y1: 210, x2: 140, y2: 200, label: "Espaçamento Delta" }
+      },
+      stages: [
+        { id: "idle", label: "SISTEMA SELETOR INICIADO", progress: 0 },
+        { id: "init", label: "FOGO DE CONTRASTE DE LUMINOL...", progress: 20 },
+        { id: "depth", label: "AFINAMENTO DE CRISTAS FORENSES...", progress: 48 },
+        { id: "pattern", label: "VERIFICANDO LAUDO DA ASSINATURA...", progress: 70 },
+        { id: "reference", label: "INDEXANDO 47 MINÚCIAS ATIVAS...", progress: 85 },
+        { id: "database", label: "CONSULTANDO BANCO BR-INV DE SUSPEITOS...", progress: 95 },
+        { id: "complete", label: "RECONHECIMENTO ESTABELECIDO", progress: 100 }
+      ],
+      logs: [
+        "> Inicializando FIS-SCAN 4000 v3.2...",
+        "> Carregando arquivo de imagem: digital_01.png",
+        "> Processamento de imagem em escala de cinzas e binarização completa",
+        "> 47 minúcias raras identificadas nas cristas dactiloscópicas",
+        "> Efetuando confronto com o cadastro técnico do Caso 1",
+        "> Correspondência POSITIVA encontrada: Marcos Vinícius Almeida (91.4% de confiança)",
+        "> Análise com Eduardo Henrique Batista resultou inconclusiva (42.1%)",
+        "> Laudo técnico DIG-001 integrado com sucesso"
+      ]
+    }
   }
 ];
