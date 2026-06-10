@@ -1,0 +1,29 @@
+Este documento possui 12 fragmentos.
+
+Existe um arquivo de referência chamado documento_original.png.
+
+A área final montada possui:
+
+Largura: 725 px
+Altura: 836 px
+
+Os fragmentos devem ser embaralhados no container esquerdo.
+
+O container direito será a área de reconstrução.
+
+Ao aproximar um fragmento de sua posição correta, aplicar snap automático.
+
+Margem de tolerância:
+20 pixels.
+
+O sistema deve validar:
+
+- posição correta
+- rotação correta
+
+Ao concluir os 12 fragmentos:
+
+Exibir:
+DOCUMENTO RECONSTRUÍDO
+
+Liberar nova pista da investigação.

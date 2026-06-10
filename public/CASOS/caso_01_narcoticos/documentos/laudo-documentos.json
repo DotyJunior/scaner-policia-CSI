@@ -1,0 +1,64 @@
+{
+  "idEvidencia": "DOC-001",
+  "tipo": "Documento Fragmentado",
+
+  "status": "Em Análise",
+
+  "localizacao": {
+    "local": "Galpão Industrial",
+    "setor": "Área Administrativa",
+    "evidenciaRelacionada": "Lixeira tombada próxima ao escritório"
+  },
+
+  "documentoReferencia": "documento_original.png",
+
+  "fragmentos": {
+    "quantidade": 12,
+    "embaralharAoCarregar": true,
+    "rotacaoPermitida": true
+  },
+
+  "areaReconstrucao": {
+    "largura": 725,
+    "altura": 836
+  },
+
+  "validacao": {
+    "verificarPosicao": true,
+    "verificarRotacao": true,
+    "snapAutomatico": true,
+    "toleranciaPixels": 20
+  },
+
+  "interface": {
+    "containerEsquerdo": "Fragmentos",
+    "containerDireito": "Reconstrucao"
+  },
+
+  "objetivo": {
+    "descricao": "Reconstruir integralmente o documento fragmentado.",
+    "fragmentosNecessarios": 12
+  },
+
+  "recompensaConclusao": {
+    "mensagem": "DOCUMENTO RECONSTRUÍDO",
+    "liberarNovaPista": true,
+    "desbloquearArquivo": "pista_documental_01"
+  },
+
+  "analisePreliminar": {
+    "estadoDocumento": "Rasgado intencionalmente",
+    "quantidadeFragmentosRecuperados": 12,
+    "possivelConteudo": [
+      "Anotações financeiras",
+      "Movimentação de cargas",
+      "Informações internas do galpão"
+    ]
+  },
+
+  "observacoes": [
+    "Fragmentos recuperados próximos à cena do incidente.",
+    "Existem indícios de destruição deliberada do documento.",
+    "Reconstrução necessária para extração completa das informações."
+  ]
+}

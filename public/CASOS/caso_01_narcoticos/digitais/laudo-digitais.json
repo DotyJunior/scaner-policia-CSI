@@ -1,0 +1,60 @@
+{
+  "idEvidencia": "DIG-001",
+  "tipo": "Impressões Digitais",
+
+  "status": "Análise Concluída",
+
+  "origemEvidencias": [
+    "digital_img_01.jpg",
+    "digital_img_02.jpg",
+    "digital_img_03.jpg",
+    "digital_img_04.jpg"
+  ],
+
+  "comparacoes": [
+    {
+      "arquivo": "comparacao_01.jpg",
+      "suspeito": "BR-INV-0837",
+      "nome": "Marcos Vinícius Almeida",
+      "resultado": "Compatível",
+      "compatibilidade": 91.4,
+      "status": "Correspondência Positiva"
+    },
+    {
+      "arquivo": "comparacao_02.jpg",
+      "suspeito": "BR-INV-0863",
+      "nome": "Eduardo Henrique Batista",
+      "resultado": "Inconclusivo",
+      "compatibilidade": 42.1,
+      "status": "Correspondência Parcial"
+    }
+  ],
+
+  "analiseTecnica": {
+    "metodo": "Comparação Papiloscópica",
+    "minuciasAnalisadas": 47,
+    "correspondenciasConfirmadas": 18,
+    "divergencias": 29,
+    "qualidadeAmostra": "Boa"
+  },
+
+  "evidenciaPrincipal": {
+    "suspeito": "BR-INV-0837",
+    "nome": "Marcos Vinícius Almeida",
+    "compatibilidade": 91.4
+  },
+
+  "observacoes": [
+    "Impressões digitais recuperadas em múltiplas superfícies da cena.",
+    "Amostras apresentaram qualidade suficiente para comparação biométrica.",
+    "Foi identificada correspondência positiva com o Suspeito 01.",
+    "A comparação com o Suspeito 04 apresentou resultado inconclusivo.",
+    "Recomenda-se análise conjunta com DNA, pegadas e documentos."
+  ],
+
+  "conclusao": {
+    "resultado": "Correspondência Positiva",
+    "nivelConfianca": "Alto",
+    "recomendacao": "Prosseguir com correlação das demais evidências do caso."
+  }
+}
