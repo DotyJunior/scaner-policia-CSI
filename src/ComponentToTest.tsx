@@ -873,7 +873,7 @@ const SuspectDetailsModal = ({ suspect, onClose }: { suspect: Suspect; onClose: 
               alt={suspect.name}
               onError={handleImgError}
               style={{
-                height: "90%",
+                height: "100%",
                 width: "auto",
                 objectFit: "contain",
                 zIndex: 10,
@@ -1205,6 +1205,93 @@ const SuspectDetailsModal = ({ suspect, onClose }: { suspect: Suspect; onClose: 
             </span>
             <span style={{ fontSize: "11px", color: "#f8fafc", fontWeight: "600" }}>
               {suspect.investigationStatus || "Não informado"}
+            </span>
+          </div>
+
+          {/* CALÇADO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Calçado:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.shoeSize || "Não informado"}
+            </span>
+          </div>
+
+          {/* DATA DE REGISTRO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Data de Registro:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.registrationDate || "Não informado"}
+            </span>
+          </div>
+
+          {/* ÚLTIMA ATUALIZAÇÃO */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "rgba(30, 41, 59, 0.15)",
+              border: "1px solid #1e293b",
+              borderRadius: "4px",
+              padding: "6px 10px",
+              flexShrink: 0
+            }}
+          >
+            <span
+              style={{
+                fontSize: "9px",
+                fontFamily: '"JetBrains Mono", monospace',
+                color: "#38bdf8",
+                fontWeight: "bold",
+                marginRight: "8px",
+                textTransform: "uppercase"
+              }}
+            >
+              Última Atualização:
+            </span>
+            <span style={{ fontSize: "11px", color: "#cbd5e1" }}>
+              {suspect.lastUpdate || "Não informado"}
             </span>
           </div>
 
@@ -2391,7 +2478,7 @@ export default function ForensicScanner({
               flex: 1,
               padding: "24px",
               overflowY: "auto",
-              background: "#0a0a0a",
+              background: "#07070d",
               borderColor: "#4e7ba6"
             }}>
               {/* Case Header Card */}
@@ -2539,7 +2626,7 @@ export default function ForensicScanner({
               <div className="scanner-columns-wrapper" style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
                 {/* Scanner Area */}
-                <div className="scanner-view-column" style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center", background: "#040407" }}>
+                <div className="scanner-view-column tech-scanner-grid" style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <div style={{
                     fontSize: 10, letterSpacing: 1.5, color: "#64748b",
                     marginBottom: 12, alignSelf: "flex-start", fontFamily: '"JetBrains Mono", monospace'

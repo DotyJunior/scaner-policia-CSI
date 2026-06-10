@@ -62,6 +62,9 @@ export interface Suspect {
   investigationStatus?: string;
   physicalTraits?: string;
   notes?: string;
+  shoeSize?: string;
+  registrationDate?: string;
+  lastUpdate?: string;
 }
 
 export interface Case {
