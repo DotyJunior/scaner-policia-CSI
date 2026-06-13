@@ -174,21 +174,26 @@
 }
 
 /* Custom subtle scrollbar for suspect modal on desktop */
-.custom-suspect-scrollbar::-webkit-scrollbar {
+.custom-suspect-scrollbar::-webkit-scrollbar,
+.custom-folder-scrollbar::-webkit-scrollbar {
   width: 5px;
 }
-.custom-suspect-scrollbar::-webkit-scrollbar-track {
+.custom-suspect-scrollbar::-webkit-scrollbar-track,
+.custom-folder-scrollbar::-webkit-scrollbar-track {
   background: rgba(8, 11, 17, 0.4);
   border-radius: 4px;
 }
-.custom-suspect-scrollbar::-webkit-scrollbar-thumb {
+.custom-suspect-scrollbar::-webkit-scrollbar-thumb,
+.custom-folder-scrollbar::-webkit-scrollbar-thumb {
   background: rgba(56, 189, 248, 0.35);
   border-radius: 4px;
 }
-.custom-suspect-scrollbar::-webkit-scrollbar-thumb:hover {
+.custom-suspect-scrollbar::-webkit-scrollbar-thumb:hover,
+.custom-folder-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(56, 189, 248, 0.7);
 }
-.custom-suspect-scrollbar {
+.custom-suspect-scrollbar,
+.custom-folder-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(56, 189, 248, 0.35) rgba(8, 11, 17, 0.4);
 }
